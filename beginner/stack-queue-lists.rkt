@@ -75,13 +75,15 @@
 ; Queue struct
 (define-struct queue ([root #:mutable]))
 
-; Add value to enqueue
+; Add value to queue
 (define (queue->enqueue! Q val)
   (define newNode (make-node val '()))
   (define (add-to-leaf ptr newNode)
-    (if (null? (node-next ptr))
+    (define ptrNext (node-next ptr))
+    (define ptrIsLeaf (null? ptrNext))
+    (if ptrIsLeaf
         (set-node-next! ptr newNode)
-        (add-to-leaf (node-next ptr) newNode)))
+        (add-to-leaf ptrNext newNode)))
   (define root (queue-root Q))
   (if (null? root)
       (set-queue-root! Q newNode)
