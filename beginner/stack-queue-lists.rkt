@@ -20,28 +20,33 @@
 
 ; Push value on to stack
 (define (stack-push! S val)
-  (define newRoot (make-node val (stack-root S)))
-  (set-stack-root! S newRoot))
+  (define rootNext (stack-root S))
+  (define newNode (make-node val rootNext))
+  (set-stack-root! S newNode))
 
 ; Pop value from stack
 (define (stack-pop! S)
-  (if (null? (stack-root S))
+  (define root (stack-root S))
+  (if (null? root)
       '()
       (let (
-            [ptr (stack-root S)])
-        (set-stack-root! S (node-next ptr))
-        (node-value ptr))))
+            [newRoot (node-next root)])
+        (set-stack-root! S newRoot)
+        (node-value root))))
 
-; Print the stack values as a list
+; Create list from stack
 (define (stack->list S)
   (define (_stack->list node acc)
     (if (null? node)
         acc
         (_stack->list (node-next node) (cons (node-value node) acc))))
-  (let (
-        [ptr (stack-root S)]
-        [acc '()])
-    (reverse (_stack->list ptr acc))))
+  (define ptr (stack-root S))
+  (define acc '())
+  (reverse (_stack->list ptr acc)))
+; (let (
+;       [ptr (stack-root S)]
+;       [acc '()])
+;   (reverse (_stack->list ptr acc))))
 
 (displayln "===== Testing stack =====\n")
 (define s1 (make-stack '()))
@@ -64,7 +69,7 @@
 
 #|
   #
-  #      Create a queue stack implementation
+  #      Create a queue implementation
   #
 |#
 
@@ -89,7 +94,7 @@
   (set-queue-root! Q (node-next ptr))
   (node-value ptr))
 
-; Create array from queue
+; Create list from queue
 (define (queue->list Q)
   (define (_queue->list node acc)
     (if (null? node)
@@ -100,7 +105,7 @@
         '()
         (reverse (_queue->list (queue-root Q) acc)))))
 
-(displayln "===== Testing stack =====\n")
+(displayln "===== Testing queue =====\n")
 (define q1 (make-queue'()))
 (displayln (queue->list q1))
 (queue->enqueue! q1 10)
