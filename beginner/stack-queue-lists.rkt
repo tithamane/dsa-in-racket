@@ -39,14 +39,13 @@
   (define (_stack->list node acc)
     (if (null? node)
         acc
-        (_stack->list (node-next node) (cons (node-value node) acc))))
-  (define ptr (stack-root S))
+        (let* ([value (node-value node)]
+               [nextNode (node-next node)]
+               [newAcc (cons value acc)])
+          (_stack->list nextNode newAcc))))
+  (define node (stack-root S))
   (define acc '())
-  (reverse (_stack->list ptr acc)))
-; (let (
-;       [ptr (stack-root S)]
-;       [acc '()])
-;   (reverse (_stack->list ptr acc))))
+  (reverse (_stack->list node acc)))
 
 (displayln "===== Testing stack =====\n")
 (define s1 (make-stack '()))
