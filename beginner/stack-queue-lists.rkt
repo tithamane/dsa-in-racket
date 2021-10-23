@@ -20,8 +20,8 @@
 
 ; Push value on to stack
 (define (stack-push! S val)
-  (define rootNext (stack-root S))
-  (define newNode (make-node val rootNext))
+  (define root (stack-root S))
+  (define newNode (make-node val root))
   (set-stack-root! S newNode))
 
 ; Pop value from stack
