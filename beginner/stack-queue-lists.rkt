@@ -1,14 +1,20 @@
 #lang racket
 
-; Node struct
+#|
+  #
+  #   Node used in all the structures
+  #
+|#
+
 (define-struct node (value [next #:mutable]))
 
 
-; Create a basic stack implementation
 #|
-	Avoiding using the simple primitives provided by the library to
-	mimick how I would build it else
+  #
+  #      Create a basic stack implementation
+  #
 |#
+
 ; Stack struct
 (define-struct stack ([root #:mutable]))
 
@@ -56,7 +62,11 @@
 (displayln "\n===== End of stack test =====")
 
 
-;; Create a basic queue implementation
+#|
+  #
+  #      Create a queue stack implementation
+  #
+|#
 
 ; Queue struct
 (define-struct queue ([root #:mutable]))
@@ -71,7 +81,7 @@
   (if (null? (queue-root Q))
       (set-queue-root! Q newNode)
       (add-to-leaf (queue-root Q) newNode)))
-  
+
 ; Remove value from queue
 ; Notice: Stack and Queue remove an item in the exact same way (Just noticed this)
 (define (queue->dequeue! Q)
