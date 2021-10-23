@@ -83,9 +83,10 @@
     (if (null? (node-next ptr))
         (set-node-next! ptr newNode)
         (add-to-leaf (node-next ptr) newNode)))
-  (if (null? (queue-root Q))
+  (define root (queue-root Q))
+  (if (null? root)
       (set-queue-root! Q newNode)
-      (add-to-leaf (queue-root Q) newNode)))
+      (add-to-leaf root newNode)))
 
 ; Remove value from queue
 ; Notice: Stack and Queue remove an item in the exact same way (Just noticed this)
@@ -99,11 +100,15 @@
   (define (_queue->list node acc)
     (if (null? node)
         acc
-        (_queue->list (node-next node) (cons (node-value node) acc))))
-  (let ([acc '()])
-    (if (null? (queue-root Q))
-        '()
-        (reverse (_queue->list (queue-root Q) acc)))))
+        (let* ([nextNode (node-next node)]
+               [nodeValue (node-value node)]
+               [newAcc (cons nodeValue acc)])
+          (_queue->list nextNode newAcc))))
+  (define acc '())
+  (define root (queue-root Q))
+  (if (null? root)
+      '()
+      (reverse (_queue->list root acc))))
 
 (displayln "===== Testing queue =====\n")
 (define q1 (make-queue'()))
