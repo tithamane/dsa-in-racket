@@ -1,7 +1,5 @@
 #lang racket
 
-(require racket/trace)
-
 #|
   #
   #   Node used in all the structures
@@ -156,25 +154,20 @@
   (define root (linked-list-root LL))
   (define newNode (make-node val '()))
   (define (_linked-list-add-in-order ptr newNode)
-    (define ptrValue (node-value ptr))
-    (define ptrNext (node-next ptr))
-    (define newNodeValue (node-value newNode))
-    (if (< ptrValue newNodeValue)
-        (if (null? ptrNext)
-            (begin
-              (set-node-next! ptr newNode)
-              ptr)
-            (begin
-              (set-node-next! ptr (_linked-list-add-in-order ptrNext newNode))
-              ptr))
-        (begin
-          (set-node-next! newNode ptr)
-          newNode)))
-  (if (null? root)
-      (set-linked-list-root! LL newNode)
-      (set-linked-list-root! LL (_linked-list-add-in-order root newNode))))
-      
-         
+    (let* ([newNodeValue (node-value newNode)]
+           [ptrValue (node-value ptr)]
+           [ptrNext (node-next ptr)])
+      (if (< ptrValue newNodeValue)
+          (begin
+            (set-node-next! ptr (_linked-list-add-in-order ptrNext newNode))
+            ptr)
+          (begin
+            (set-node-next! newNode ptr)
+            newNode
+            ))))
+  (set-linked-list-root! LL (_linked-list-add-in-order root newNode)))
+
+
 
 ; Create a list from linked list
 (define (linked-list->list LL)
@@ -182,7 +175,7 @@
   (define (_linked-list->list ptr acc)
     (if (null? ptr)
         acc
-        (let* ([value (node-value ptr)] 
+        (let* ([value (node-value ptr)]
                [nextPtr (node-next ptr)]
                [newAcc (cons value acc)])
           (_linked-list->list nextPtr newAcc))))
