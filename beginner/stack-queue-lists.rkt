@@ -153,20 +153,17 @@
 (define (linked-list-add LL val)
   (define root (linked-list-root LL))
   (define newNode (make-node val '()))
+  (define (_set-node-next cur next)
+    (set-node-next! cur next)
+    cur)
   (define (_linked-list-add-in-order ptr newNode)
     (let* ([newNodeValue (node-value newNode)]
            [ptrValue (node-value ptr)]
            [ptrNext (node-next ptr)])
       (if (< ptrValue newNodeValue)
-          (begin
-            (set-node-next! ptr (_linked-list-add-in-order ptrNext newNode))
-            ptr)
-          (begin
-            (set-node-next! newNode ptr)
-            newNode
-            ))))
+          (_set-node-next ptr (_linked-list-add-in-order ptrNext newNode))
+          (_set-node-next newNode ptr))))
   (set-linked-list-root! LL (_linked-list-add-in-order root newNode)))
-
 
 
 ; Create a list from linked list
