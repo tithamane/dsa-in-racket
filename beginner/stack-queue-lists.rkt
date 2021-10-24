@@ -157,12 +157,13 @@
     (set-node-next! cur next)
     cur)
   (define (_linked-list-add-in-order ptr newNode)
-    (let* ([newNodeValue (node-value newNode)]
-           [ptrValue (node-value ptr)]
-           [ptrNext (node-next ptr)])
-      (if (< ptrValue newNodeValue)
-          (_set-node-next ptr (_linked-list-add-in-order ptrNext newNode))
-          (_set-node-next newNode ptr))))
+    (define newNodeValue (node-value newNode))
+    (define ptrValue (node-value ptr))
+    (define ptrNext (node-next ptr))
+    (define ptrLessThanNewValue (< ptrValue newNodeValue))
+    (if ptrLessThanNewValue
+        (_set-node-next ptr (_linked-list-add-in-order ptrNext newNode))
+        (_set-node-next newNode ptr)))
   (set-linked-list-root! LL (_linked-list-add-in-order root newNode)))
 
 
