@@ -159,9 +159,9 @@
   (define (_linked-list-add-in-order ptr newNode)
     (define newNodeValue (node-value newNode))
     (define ptrValue (node-value ptr))
+    (define ptrValueLessThanNewValue (< ptrValue newNodeValue))
     (define ptrNext (node-next ptr))
-    (define ptrLessThanNewValue (< ptrValue newNodeValue))
-    (if ptrLessThanNewValue
+    (if ptrValueLessThanNewValue
         (_set-node-next ptr (_linked-list-add-in-order ptrNext newNode))
         (_set-node-next newNode ptr)))
   (set-linked-list-root! LL (_linked-list-add-in-order root newNode)))
