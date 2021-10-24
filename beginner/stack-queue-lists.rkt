@@ -1,5 +1,7 @@
 #lang racket
 
+(require racket/trace)
+
 #|
   #
   #   Node used in all the structures
@@ -7,7 +9,6 @@
 |#
 
 (define-struct node (value [next #:mutable]))
-
 
 #|
   #
@@ -127,4 +128,83 @@
 (queue->dequeue! q1)
 (displayln (queue->list q1))
 
-;; Create a basic linked-list implementation
+#|
+  #
+  #      Create a basic linked-list implementation
+  #
+|#
+
+(define-struct linked-list ([root #:mutable]))
+
+; Add a value
+(define (linked-list-append LL val)
+  (define newNode (make-node val '()))
+  (define (add-to-end ptr node)
+    (define nextPtr (node-next ptr))
+    (define ptrIsLeaf (null? nextPtr))
+    (if ptrIsLeaf
+        (set-node-next! ptr node)
+        (add-to-end nextPtr node)))
+  (define root (linked-list-root LL))
+  (if (null? root)
+      (set-linked-list-root! LL newNode)
+      (add-to-end root newNode)))
+
+;; Add item in an ordered fashing (Hopefully nothing was appended out of order)
+; TODO: Can this be made more readable? It's not readable enough for me.
+(define (linked-list-add LL val)
+  (define root (linked-list-root LL))
+  (define newNode (make-node val '()))
+  (define (_linked-list-add-in-order ptr newNode)
+    (define ptrValue (node-value ptr))
+    (define ptrNext (node-next ptr))
+    (define newNodeValue (node-value newNode))
+    (if (< ptrValue newNodeValue)
+        (if (null? ptrNext)
+            (begin
+              (set-node-next! ptr newNode)
+              ptr)
+            (begin
+              (set-node-next! ptr (_linked-list-add-in-order ptrNext newNode))
+              ptr))
+        (begin
+          (set-node-next! newNode ptr)
+          newNode)))
+  (if (null? root)
+      (set-linked-list-root! LL newNode)
+      (set-linked-list-root! LL (_linked-list-add-in-order root newNode))))
+      
+         
+
+; Create a list from linked list
+(define (linked-list->list LL)
+  (define root (linked-list-root LL))
+  (define (_linked-list->list ptr acc)
+    (if (null? ptr)
+        acc
+        (let* ([value (node-value ptr)] 
+               [nextPtr (node-next ptr)]
+               [newAcc (cons value acc)])
+          (_linked-list->list nextPtr newAcc))))
+  (define acc '())
+  (if (null? root)
+      acc
+      (reverse (_linked-list->list root acc))))
+
+
+(displayln "===== Testing linked-list =====\n")
+(define ll1 (make-linked-list '()))
+(displayln (linked-list->list ll1))
+(linked-list-append ll1 10)
+(displayln (linked-list->list ll1))
+(linked-list-append ll1 20)
+(displayln (linked-list->list ll1))
+(linked-list-append ll1 30)
+(displayln (linked-list->list ll1))
+(displayln "Add values in order")
+(linked-list-add ll1 25)
+(displayln (linked-list->list ll1))
+(linked-list-add ll1 15)
+(displayln (linked-list->list ll1))
+(displayln "\n===== End of linked-list test =====")
+
