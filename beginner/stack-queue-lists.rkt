@@ -217,6 +217,19 @@
           (set-linked-list-root! LL (node-next root))
           (_linked-list-remove-val root val))))
 
+; Improved but still not looking. Need to maybe try clean up and see which looks best
+(define (linked-list-remove-v3 LL val)
+  (define root (linked-list-root LL))
+  (define (_linked-list-remove-val node val)
+    (cond   [(null? node) '()]
+            [(= (node-value node) val) (node-next node)]
+            [else (begin
+                    (set-node-next! node (_linked-list-remove-val (node-next node) val))
+                    node)]))
+  (if (null? root)
+      '()
+      (set-linked-list-root! LL (_linked-list-remove-val root val))))
+
 
 
 (displayln "===== Testing linked-list =====\n")
@@ -234,15 +247,15 @@
 (linked-list-add ll1 15)
 
 (displayln (linked-list->list ll1))
-(linked-list-remove-v2 ll1 20)
+(linked-list-remove-v3 ll1 20)
 (displayln (linked-list->list ll1))
-(linked-list-remove-v2 ll1 15)
+(linked-list-remove-v3 ll1 15)
 (displayln (linked-list->list ll1))
-(linked-list-remove-v2 ll1 30)
+(linked-list-remove-v3 ll1 30)
 (displayln (linked-list->list ll1))
-(linked-list-remove-v2 ll1 10)
+(linked-list-remove-v3 ll1 10)
 (displayln (linked-list->list ll1))
-(linked-list-remove-v2 ll1 25)
+(linked-list-remove-v3 ll1 25)
 (displayln (linked-list->list ll1))
 (displayln "\n===== End of linked-list test =====")
 
