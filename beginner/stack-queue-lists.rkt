@@ -185,8 +185,8 @@
 
 
 ; Removing a val from a linked list
-; - If root is null then return
-; - If root have value then set the next as head
+; - If root is null then return NIL
+; - If root have value then set the linked list root as current root's next
 ; - Loop through list and remove the next node if it has the value
 ;; This works but it still looks NASTY
 (define (linked-list-remove LL val)
@@ -200,6 +200,23 @@
   (cond   [(null? root) '()]
           [(= (node-value root) val) (set-linked-list-root! LL (node-next root))]
           [else (set-node-next! root (_linked-list-remove (node-next root) val))]))
+
+; This still works but still looks 👎
+(define (linked-list-remove-v2 LL val)
+  (define root (linked-list-root LL))
+  (define (_linked-list-remove-val previous val)
+    (define next (node-next previous))
+    (if (null? previous)
+        '()
+        (if (= (node-value next) val)
+            (set-node-next! previous (node-next next))
+            (_linked-list-remove-val (node-next previous) val))))
+  (if (null? root)
+      '()
+      (if (= (node-value root) val)
+          (set-linked-list-root! LL (node-next root))
+          (_linked-list-remove-val root val))))
+
 
 
 (displayln "===== Testing linked-list =====\n")
@@ -215,16 +232,17 @@
 (linked-list-add ll1 25)
 (displayln (linked-list->list ll1))
 (linked-list-add ll1 15)
+
 (displayln (linked-list->list ll1))
-(linked-list-remove ll1 20)
+(linked-list-remove-v2 ll1 20)
 (displayln (linked-list->list ll1))
-(linked-list-remove ll1 15)
+(linked-list-remove-v2 ll1 15)
 (displayln (linked-list->list ll1))
-(linked-list-remove ll1 30)
+(linked-list-remove-v2 ll1 30)
 (displayln (linked-list->list ll1))
-(linked-list-remove ll1 10)
+(linked-list-remove-v2 ll1 10)
 (displayln (linked-list->list ll1))
-(linked-list-remove ll1 25)
+(linked-list-remove-v2 ll1 25)
 (displayln (linked-list->list ll1))
 (displayln "\n===== End of linked-list test =====")
 
