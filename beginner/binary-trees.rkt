@@ -1,0 +1,38 @@
+#lang racket
+
+(define-struct node (value [left #:mutable] [right #:mutable]))
+(define-struct binary-tree ([root #:mutable]))
+
+(define (binary-tree-add BT val)
+  (define (_insert-right ptrNode newNode)
+    (define ptrRight (node-right ptrNode))
+    (if (null? ptrRight)
+        (set-node-right! ptrNode newNode)
+        (_binary-tree-add ptrRight newNode)))
+  (define (_insert-left ptrNode newNode)
+    (define ptrLeft (node-left ptrNode))
+    (if (null? ptrLeft)
+        (set-node-left! ptrNode newNode)
+        (_binary-tree-add ptrLeft newNode)))
+  (define (_binary-tree-add ptrNode newNode)
+    (define ptrValue (node-value ptrNode))
+    (define val (node-value newNode))
+    (if (< ptrValue val)
+        (_insert-left ptrNode newNode)
+        (_insert-right ptrNode newNode)))
+  (define newNode (make-node val '() '()))
+  (define root (binary-tree-root BT))
+  (if (null? root)
+      (set-binary-tree-root! BT newNode)
+      (_binary-tree-add root newNode)))
+
+
+(define tree1 (make-binary-tree '()))
+
+(binary-tree-add tree1 50)
+(binary-tree-add tree1 25)
+(binary-tree-add tree1 75)
+(binary-tree-add tree1 35)
+(binary-tree-add tree1 15)
+(binary-tree-add tree1 85)
+(binary-tree-add tree1 65)
