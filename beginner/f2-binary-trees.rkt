@@ -1,5 +1,7 @@
 #lang racket
 
+;; TODO: I need to study this code and rewrite it in future (maybe 2 years from now)
+
 (require "f1-stack-queue-lists.rkt")
 
 (define-struct node (value [left #:mutable] [right #:mutable]))
@@ -59,13 +61,38 @@
       (_binary-tree-find-node root val)))
 
 
-; (define (binary-tree-remove BT val)
-;   (define (_binary-tree-remove node val)
-;     '())
-;   (define root (binary-tree-root BT))
-;   (if (null? root)
-;     '()
-;     (_binary-tree-remove root val)
+;; TODO: This monstrocity looking (to me) function needs revised/cleaned up versions
+(define (binary-tree-remove BT val)
+  (define (_move-node-to-bottomest-left newParentNode node)
+    (define parentLeft (node-left newParentNode))
+    (if (null? parentLeft)
+        (set-node-left! newParentNode node)
+        (_move-node-to-bottomest-left parentLeft node)))
+  (define (_perform-remove node hasLeft hasRight)
+    (cond [(not hasRight) (node-left node)]
+          [(and hasRight (not hasLeft)) (node-right node)]
+          [else (begin
+                  (_move-node-to-bottomest-left (node-right node) (node-left node))
+                  (node-right node))]))
+  (define (_binary-tree-remove node val)
+    (define nodeValue (node-value node))
+    (define hasLeft (not (null? (node-left node))))
+    (define hasRight (not (null? (node-right node))))
+    (cond [(= nodeValue val) (_perform-remove node hasLeft hasRight)]
+          [(and hasLeft (< val nodeValue)) (begin
+                                             (set-node-left! node (_binary-tree-remove (node-left node) val))
+                                             node)]
+          [(and hasRight (> val nodeValue)) (begin
+                                              (set-node-right! node (_binary-tree-remove (node-right node) val))
+                                              node
+                                              )]
+          [else node]))
+  (define root (binary-tree-root BT))
+  (if (null? root)
+      '()
+      (set-binary-tree-root! BT (_binary-tree-remove root val))))
+
+
 
 
 
@@ -132,3 +159,41 @@
 (binary-tree-print-node-with-siblings node9)
 (binary-tree-print-node-with-siblings node9Left)
 (binary-tree-print-node-with-siblings node9Right)
+
+(displayln "Removing nodes from tree")
+(define tree3 (make-binary-tree '()))
+
+(binary-tree-add tree3 8)
+
+(binary-tree-add tree3 4)
+(binary-tree-add tree3 12)
+
+
+(binary-tree-add tree3 2)
+(binary-tree-add tree3 5)
+(binary-tree-add tree3 10)
+(binary-tree-add tree3 14)
+
+
+(binary-tree-add tree3 1)
+(binary-tree-add tree3 3)
+(binary-tree-add tree3 6)
+(binary-tree-add tree3 7)
+(binary-tree-add tree3 9)
+(binary-tree-add tree3 11)
+(binary-tree-add tree3 13)
+(binary-tree-add tree3 15)
+
+(displayln (linked-list->list (dfs tree3)))
+(displayln "About to remove 3")
+(binary-tree-remove tree3 3)
+(displayln (linked-list->list (dfs tree3)))
+(displayln "About to remove 5")
+(binary-tree-remove tree3 5)
+(displayln (linked-list->list (dfs tree3)))
+(displayln "About to remove 12")
+(binary-tree-remove tree3 12)
+(displayln (linked-list->list (dfs tree3)))
+(displayln "About to remove 8")
+(binary-tree-remove tree3 8)
+(displayln (linked-list->list (dfs tree3)))
