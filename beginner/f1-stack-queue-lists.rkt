@@ -1,5 +1,7 @@
 #lang racket
 
+(provide (all-defined-out))
+
 #|
   #
   #   Node used in all the structures
@@ -46,24 +48,6 @@
   (define acc '())
   (reverse (_stack->list node acc)))
 
-(displayln "===== Testing stack =====\n")
-(define s1 (make-stack '()))
-(displayln (stack->list s1))
-(stack-push! s1 10)
-(displayln (stack->list s1))
-(stack-push! s1 20)
-(displayln (stack->list s1))
-(stack-push! s1 30)
-(displayln (stack->list s1))
-(stack-pop! s1)
-(displayln (stack->list s1))
-(stack-pop! s1)
-(displayln (stack->list s1))
-(stack-pop! s1)
-(displayln (stack->list s1))
-
-(displayln "\n===== End of stack test =====")
-
 
 #|
   #
@@ -109,22 +93,6 @@
   (if (null? root)
       '()
       (reverse (_queue->list root acc))))
-
-(displayln "===== Testing queue =====\n")
-(define q1 (make-queue'()))
-(displayln (queue->list q1))
-(queue->enqueue! q1 10)
-(displayln (queue->list q1))
-(queue->enqueue! q1 20)
-(displayln (queue->list q1))
-(queue->enqueue! q1 30)
-(displayln (queue->list q1))
-(queue->dequeue! q1)
-(displayln (queue->list q1))
-(queue->dequeue! q1)
-(displayln (queue->list q1))
-(queue->dequeue! q1)
-(displayln (queue->list q1))
 
 #|
   #
@@ -231,31 +199,67 @@
       (set-linked-list-root! LL (_linked-list-remove-val root val))))
 
 
+(define (run)
+  (displayln "===== Testing stack =====\n")
+  (define s1 (make-stack '()))
+  (displayln (stack->list s1))
+  (stack-push! s1 10)
+  (displayln (stack->list s1))
+  (stack-push! s1 20)
+  (displayln (stack->list s1))
+  (stack-push! s1 30)
+  (displayln (stack->list s1))
+  (stack-pop! s1)
+  (displayln (stack->list s1))
+  (stack-pop! s1)
+  (displayln (stack->list s1))
+  (stack-pop! s1)
+  (displayln (stack->list s1))
 
-(displayln "===== Testing linked-list =====\n")
-(define ll1 (make-linked-list '()))
-(displayln (linked-list->list ll1))
-(linked-list-append ll1 10)
-(displayln (linked-list->list ll1))
-(linked-list-append ll1 20)
-(displayln (linked-list->list ll1))
-(linked-list-append ll1 30)
-(displayln (linked-list->list ll1))
-(displayln "Add values in order")
-(linked-list-add ll1 25)
-(displayln (linked-list->list ll1))
-(linked-list-add ll1 15)
+  (displayln "===== Testing queue =====\n")
+  (define q1 (make-queue'()))
+  (displayln (queue->list q1))
+  (queue->enqueue! q1 10)
+  (displayln (queue->list q1))
+  (queue->enqueue! q1 20)
+  (displayln (queue->list q1))
+  (queue->enqueue! q1 30)
+  (displayln (queue->list q1))
+  (queue->dequeue! q1)
+  (displayln (queue->list q1))
+  (queue->dequeue! q1)
+  (displayln (queue->list q1))
+  (queue->dequeue! q1)
+  (displayln (queue->list q1))
 
-(displayln (linked-list->list ll1))
-(linked-list-remove-v3 ll1 20)
-(displayln (linked-list->list ll1))
-(linked-list-remove-v3 ll1 15)
-(displayln (linked-list->list ll1))
-(linked-list-remove-v3 ll1 30)
-(displayln (linked-list->list ll1))
-(linked-list-remove-v3 ll1 10)
-(displayln (linked-list->list ll1))
-(linked-list-remove-v3 ll1 25)
-(displayln (linked-list->list ll1))
-(displayln "\n===== End of linked-list test =====")
+
+
+  (displayln "===== Testing linked-list =====\n")
+  (define ll1 (make-linked-list '()))
+  (displayln (linked-list->list ll1))
+  (linked-list-append ll1 10)
+  (displayln (linked-list->list ll1))
+  (linked-list-append ll1 20)
+  (displayln (linked-list->list ll1))
+  (linked-list-append ll1 30)
+  (displayln (linked-list->list ll1))
+  (displayln "Add values in order")
+  (linked-list-add ll1 25)
+  (displayln (linked-list->list ll1))
+  (linked-list-add ll1 15)
+
+  (displayln (linked-list->list ll1))
+  (linked-list-remove-v3 ll1 20)
+  (displayln (linked-list->list ll1))
+  (linked-list-remove-v3 ll1 15)
+  (displayln (linked-list->list ll1))
+  (linked-list-remove-v3 ll1 30)
+  (displayln (linked-list->list ll1))
+  (linked-list-remove-v3 ll1 10)
+  (displayln (linked-list->list ll1))
+  (linked-list-remove-v3 ll1 25)
+  (displayln (linked-list->list ll1)))
+
+(module+ main
+  (run))
 

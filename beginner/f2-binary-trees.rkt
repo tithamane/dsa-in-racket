@@ -1,5 +1,7 @@
 #lang racket
 
+(require "f1-stack-queue-lists.rkt")
+
 (define-struct node (value [left #:mutable] [right #:mutable]))
 (define-struct binary-tree ([root #:mutable]))
 
@@ -16,8 +18,8 @@
         (_binary-tree-add ptrLeft newNode)))
   (define (_binary-tree-add ptrNode newNode)
     (define ptrValue (node-value ptrNode))
-    (define val (node-value newNode))
-    (if (< ptrValue val)
+    (define newValue (node-value newNode))
+    (if (< newValue ptrValue)
         (_insert-left ptrNode newNode)
         (_insert-right ptrNode newNode)))
   (define newNode (make-node val '() '()))
@@ -29,10 +31,31 @@
 
 (define tree1 (make-binary-tree '()))
 
+(define (dfs BT)
+  (define (_dfs node ll)
+    (unless (null? (node-left node))
+      (_dfs (node-left node) ll))
+    (linked-list-append ll (node-value node))
+    (unless (null? (node-right node))
+      (_dfs (node-right node) ll)))
+  (define currentNode (binary-tree-root BT))
+  (define ll (make-linked-list '()))
+  (if (null? currentNode)
+      ll
+      (begin  (_dfs currentNode ll)
+              ll)))
+
 (binary-tree-add tree1 50)
+(displayln (linked-list->list (dfs tree1)))
 (binary-tree-add tree1 25)
+(displayln (linked-list->list (dfs tree1)))
 (binary-tree-add tree1 75)
+(displayln (linked-list->list (dfs tree1)))
 (binary-tree-add tree1 35)
+(displayln (linked-list->list (dfs tree1)))
 (binary-tree-add tree1 15)
+(displayln (linked-list->list (dfs tree1)))
 (binary-tree-add tree1 85)
+(displayln (linked-list->list (dfs tree1)))
 (binary-tree-add tree1 65)
+(displayln (linked-list->list (dfs tree1)))
