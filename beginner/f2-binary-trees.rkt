@@ -3,6 +3,7 @@
 ;; TODO: I need to study this code and rewrite it in future (maybe 2 years from now)
 
 (require "f1-stack-queue-lists.rkt")
+(require "utils.rkt")
 
 (define-struct node (value [left #:mutable] [right #:mutable]))
 (define-struct binary-tree ([root #:mutable]))
@@ -92,6 +93,21 @@
       '()
       (set-binary-tree-root! BT (_binary-tree-remove root val))))
 
+
+(define (binary-tree-height-from-node node acc)
+  (if (null? node)
+      acc
+      (let* ([newAcc (+ acc 1)]
+             [leftNode (node-left node)]
+             [rightNode (node-right node)]
+             [leftMax (binary-tree-height-from-node leftNode newAcc)]
+             [rightMax (binary-tree-height-from-node rightNode newAcc)])
+        (t-max (list leftMax rightMax)))))
+
+
+(define (binary-tree-height BT)
+  (define root (binary-tree-root BT))
+  (binary-tree-height-from-node root 0))
 
 
 
@@ -197,3 +213,22 @@
 (displayln "About to remove 8")
 (binary-tree-remove tree3 8)
 (displayln (linked-list->list (dfs tree3)))
+
+(displayln "===== Tree height =====")
+(define tree4 (make-binary-tree '()))
+
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 50)
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 75)
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 85)
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 90)
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 95)
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 100)
+(displayln (binary-tree-height tree4))
+(binary-tree-add tree4 25)
+(displayln (binary-tree-height tree4))
