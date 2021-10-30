@@ -30,9 +30,9 @@
 
 (define (t-length L)
   (define (_t-length l acc)
-    (null? l)
-    acc
-    (_t-length (rest l) (+ acc 1)))
+    (if (null? l)
+        acc
+        (_t-length (rest l) (+ acc 1))))
   (_t-length L 0))
 
 (define (t-make-list size)

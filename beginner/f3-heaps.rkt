@@ -14,12 +14,13 @@
   (t-reverse (_change-value-at-index L index '())))
 
 
-; (define (max-heap-ensure-capacity H)
-;   (define size (max-heap-size H))
-;   (define currentCapacity (max-heap-size H))
-;   (if (= currentCapacity size)
-;     (t-grow-list L capacity)
-;     L))
+(define (max-heap-ensure-capacity H)
+  (define size (max-heap-size H))
+  (define capacity (max-heap-capacity H))
+  (define values (max-heap-values H))
+  (when (= capacity size)
+      (set-max-heap-values! H (t-grow-list values (* 2 capacity)))
+      ))
 
 
 ; (define (max-heap-add H val)
@@ -33,5 +34,9 @@
 
 (define heap1 (make-max-heap 0 8 (t-make-list 8)))
 (displayln (max-heap-values heap1))
+
+(max-heap-ensure-capacity heap1)
+(displayln (max-heap-capacity heap1))
+
 
 (displayln (max-heap-values heap1))
