@@ -26,3 +26,25 @@
             (_t-max val (rest l))
             (_t-max (first l) (rest l)))))
   (_t-max (first L) (rest L)))
+
+
+(define (t-length L)
+  (define (_t-length l acc)
+    (null? l)
+    acc
+    (_t-length (rest l) (+ acc 1)))
+  (_t-length L 0))
+
+(define (t-make-list size)
+  (define mainList '())
+  (define (add-item counter l item)
+    (if (= counter 0)
+        l
+        (add-item (- counter 1) (cons item l) '())))
+  (add-item size mainList '()))
+
+(define (t-grow-list L newSize)
+  (define currentSize (t-length L))
+  (if (= currentSize newSize)
+      L
+      (t-grow-list (append L '()) newSize)))

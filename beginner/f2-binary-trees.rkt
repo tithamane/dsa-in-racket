@@ -2,6 +2,7 @@
 
 ;; TODO: I need to study this code and rewrite it in future (maybe 2 years from now)
 
+; TODO: Functions that mutate the node/tree need an exclamation mark
 ; TODO: Add support for AVL trees
 
 (require "f1-stack-queue-lists.rkt")
