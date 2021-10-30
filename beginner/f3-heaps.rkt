@@ -6,22 +6,6 @@
 
 (define-struct max-heap ([values #:mutable]))
 
-; Swap two indexes in an array
-(define (swap-at-indexes L firstIndex secondIndex)
-  (define firstValue (list-ref L firstIndex))
-  (define secondValue (list-ref L secondIndex))
-  (define (_change-at-index l index value)
-    (define firstPart (take l index))
-    (define lastPart (drop l (+ 1 index)))
-    (append firstPart (list value) lastPart))
-  (if (= (t-length L) 2)
-      (list secondValue firstValue)
-      (let* ([firstValueSwapped (_change-at-index L firstIndex secondValue)]
-             [secondValueSwapped (_change-at-index firstValueSwapped secondIndex firstValue)])
-        secondValueSwapped)))
-
-
-
 (define (max-heap-add H val)
   (define values (max-heap-values H))
   (define newValues (append values (list val)))

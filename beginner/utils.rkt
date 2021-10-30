@@ -7,6 +7,24 @@
 |#
 
 
+; Swap two indexes in an array
+(define (swap-at-indexes L firstIndex secondIndex)
+  (define firstValue (list-ref L firstIndex))
+  (define secondValue (list-ref L secondIndex))
+  (define (_change-at-index l index value)
+    (define firstPart (take l index))
+    (define lastPart (drop l (+ 1 index)))
+    (append firstPart (list value) lastPart))
+  (if (= (t-length L) 2)
+      (list secondValue firstValue)
+      (let* ([firstValueSwapped (_change-at-index L firstIndex secondValue)]
+             [secondValueSwapped (_change-at-index firstValueSwapped secondIndex firstValue)])
+        secondValueSwapped)))
+
+
+
+
+
 (define (t-reverse L)
   (define (_t-reverse oldList newList)
     (if (null? oldList)
